@@ -1,0 +1,28 @@
+1. created a simple spring boot web application using spring intializer website.
+2. using postgres as a datasource hence creating a db to provide as spring datasource. For now
+   only one db is created in the name of the tenant.
+    //TODO In a larger picture we need to serve the api for multiple clients.
+    // TODO Need to discuss with Sebin on how to design services that can serve multiple clients.
+
+    The following is the command is spawn a docker container with container name postgresdb
+    that runs postgres server with user postgres and password admin
+
+    docker container run --name postgresdb -e POSTGRES_PASSWORD=admin -d -p 5432:5432 postgres
+    use the command to check the running containers
+    docker container ls
+
+3. create a sql script that creates a database and a user for the database.
+4. copy the script to the docker container
+   docker cp sqlscripts/forecaster.sql postgresdb:/
+5. enter into the docker container bash
+   docker container exec -it postgresdb bash
+6. run the following command to execute the copied sql
+   psql -U postgres --file forecaster.sql
+7. Spring offers multiple ways to configure datasource beans. one way is to set in the application.properties
+   another way is using java config beans.
+   // TODO Need to discuss with sebin how they configure multiple datasources in their company and in general.
+   for now going with application.properties
+8. set the following properties in application.properties.(Remember that properties file doesn't allow spaces)
+   spring.datasource.url=jdbc:postgresql://localhost:5432/walmartdb
+   spring.datasource.username=walmart
+   spring.datasource.password=walmart@123
